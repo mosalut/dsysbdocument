@@ -4,7 +4,7 @@
 - All "transactions" or "tx" in this book refer to operations, not financial trades.
 
 ## 1. Introduction
-__DSYSB__ (_Decentral System Blockchain_) is a decentralized cryptocurrency system based on blockchain. It is similar to __bitcoin__ and also uses __Ethereum__’s account model. __DSYSB__ centers around decentralized asset operations. Fungible assets can be seen as currencies, and a currency with a total supply of 1 can be considered an asset (like an _NFT_).
+__DSYSB__ (_Decentralized System Blockchain_) is a decentralized cryptocurrency system based on blockchain. It is similar to __bitcoin__ and also uses __Ethereum__’s account model. __DSYSB__ centers around decentralized asset operations. Fungible assets can be seen as currencies, and a currency with a total supply of 1 can be considered an asset (like an _NFT_).
 
 ### DSB
 _DSB_ is the native system token on the __DSYSB__ chain, similar to ETH on __Ethereum__. Its unit is _DSB_, and the smallest unit is _satoshi_, with 1 _DSB_ = 100,000,000 _satoshi_.
