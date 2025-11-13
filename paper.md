@@ -1,7 +1,6 @@
 ## 0. Conventions
-- This book mentions references to __bitcoin__ or some other cryptocurrencies. Direct jump links are provided without repetition.
+- This paper mentions references to __bitcoin__ or some other cryptocurrencies. Direct jump links are provided without repetition.
 - The smallest unit in this book remains consistent with __bitcoin__ (__satoshi__).
-- All "transactions" or "tx" in this book refer to operations, not financial trades.
 
 ## 1. Introduction
 __DSYSB__ (_Decentralized System Blockchain_) is a decentralized cryptocurrency system based on blockchain. It is similar to __bitcoin__ and also uses __Ethereum__’s account model. __DSYSB__ centers around decentralized asset operations. Fungible assets can be seen as currencies, and a currency with a total supply of 1 can be considered an asset (like an _NFT_).
@@ -34,18 +33,18 @@ This process, called mining, is a point of synchronization across the network. H
 DSYSB follows __bitcoin__’s rule: a transaction is irreversible after 6 confirmations.
 
 ### How it Works
-- _Problem Complexity_: Miners must find a hash meeting certain criteria (e.g., leading zeros) by hashing the block header.
+- _Problem Complexity_: Miners must find a hash meeting certain criteria (e.g., e.g., less than a given value) by hashing the block header.
 - _Competition_: All miners compete to find a valid hash. The winner adds the next block.
 - _Reward_: The successful miner earns crypto and transaction fees.
 
 ### Difficulty Adjustment
-To maintain stability, __DSYSB__ adjusts difficulty every 1024 blocks to target a 10-minute block time.
+To maintain stability, __DSYSB__ adjusts difficulty every 2016 blocks to target a 10-minute block time.
 See: [__bitcoin__ whitepaper](https://bitcoin.org/bitcoin.pdf)
 
 ## 3. Account Model
 __DSYSB__ uses __Ethereum__’s account model.
 
-### Model Components
+### Account Model Components
 - __Balance__: Native token balances are stored as unsigned 64-bit integers.
 - __Custom Assets__: Accounts may hold multiple assets, each with a unique hex ID and balance.
 - __Replay Protection__: Each account has a nonce to track transaction count for uniqueness.
@@ -64,7 +63,7 @@ This model aims to store and verify decentralized asset transactions using effic
 
 ### Block Header and Body
 - __Header__: Includes previous hash, current hash, state root, transaction root, difficulty, timestamp, and nonce.
-- __Body__: Contains transaction sets and execution support.
+- __Body__: Contains a set of transactions, supporting the execution and management of transactions within the block to improve user interaction efficiency.
 
 Compared to bitcoin, DSYSB adds a state root and transaction root for improved scalability and complexity support. Headers and bodies are serialized for storage and parsing using little-endian byte order.
 
@@ -74,16 +73,27 @@ Blocks can be queried by index over HTTP to retrieve data.
 _Transactions_ define how digital assets are handled and provide methods for hashing, encoding, decoding, computing, verifying, and string representation.
 
 ### Transaction Types
-- _coinbase_: Rewards miners for maintaining the network. Fees are added to the amount.
-- _create_: Issues new assets. Users buy how many blocks the asset can survive. If it expires with no extension, it disappears. In order to prevent the chain from being occupied by garbage, __DSYSB__ believes that if an asset does have value, someone must pay attention to its use. Therefore, when an asset is released, it is necessary to "buy" how many blocks it can be used in the future. If this amount is used up and no one is willing to continue the asset, then the asset will disappear on the chain! This is a very important feature, please be aware of it.
+- _coinbase_: Rewards miners for maintaining the network. The transaction fees are also added to the _coinbase_ reward.
+The initial coinbase reward per block is 500 _DSB_.
+The reward is halved every 157,680 blocks (approximately 3 years, similar to Bitcoin), and this halving occurs three times.
+After the final halving, the reward directly decreases to 0, lasting a total of about 9 years.
+After that, only transaction fees remain as miner rewards, with no additional block rewards.
+
+Based on this, the total supply of __DSB__ can be calculated as:
+
+```
+157680 * 500 + 157680 * 250 + 157680 * 125 = 137,970,000
+```
+
+- _create_: Used to create new digital assets, allowing users to define basic attributes such as the asset’s name and total supply. This type of transaction is packaged into raw transaction data and encoded. Users buy how many blocks the asset can survive. If it expires with no extension, it disappears. In order to prevent the chain from being occupied by garbage, __DSYSB__ believes that if an asset does have value, someone must pay attention to its use. Therefore, when an asset is released, it is necessary to "buy" how many blocks it can be used in the future. If this amount is used up and no one is willing to continue the asset, then the asset will disappear on the chain! This is a very important feature, please be aware of it.
 - _transfer_: Transfers existing assets or __DSB__ between users with specified sender, receiver, and amount.
 - _exchange_: Atomic swaps between two parties within one transaction.
-- _deploy_: Publishes a task (like a simplified smart contract). No calls or permissions exist between tasks. The sender funds the task.
+- _deploy_: Publishes a task (like a simplified smart contract). Tasks in __DSYSB__ are composed of simple computational and transfer instructions. No calls or permissions exist between tasks. The sender funds the task. The address used to deploy the task will be locked until the task terminated; no other transactions can be initiated while the address is locked.
 - _call_: Executes a task, possibly changing variables or triggering transfers.
 - _extension_: Extends the lifetime (block count) of an asset or a task.
 
 ### Fee
-TODO
+The transaction fee is calculated by multiplying the _bytePrice_ by the transaction's byte length.
 
 ## 7. Wallet Address
-Wallet generation, signing, and verification follow __bitcoin__’s method. __DSYSB__ addresses are base58-encoded and always 34 characters starting with _D_.
+Wallet generation, signing, and verification follow __bitcoin__'s method. __DSYSB__ addresses are base58-encoded and always 34 characters starting with _D_.
