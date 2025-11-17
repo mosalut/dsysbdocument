@@ -50,7 +50,7 @@ Create a transaction
 parameter:
 - Transaction type
 1. create: Create an asset
-2. transfer: Transfer funds
+2. transfer: A transfer is a basic blockchain transaction used to move digital assets from one address to another.
 3. exchange: Exchange assets
 4. deploy: Deploy a task
 5. call: Call a task

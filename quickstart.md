@@ -255,12 +255,12 @@ $ ./dsysbcmd createrawtransaction transfer '{"from":"D892kxbavZUUmj5DHoVCJAFUWsW
 
 #### All Transaction Types
 
-- _coinbase_ Mining reward
-- _create_ Create an asset
-- _transfer_ Transfer asset
-- _exchange_ Asset swap
-- _deploy_ Deploy a task
-- _call_ Call a task
-- _extension_ Extend the lifespan of an asset or task
+- _coinbase_: Mining reward
+- _create_: Create an asset
+- _transfer_: A transfer is a basic blockchain transaction used to move digital assets from one address to another.
+- _exchange_: Asset swap
+- _deploy_: Deploy a task
+- _call_: Call a task
+- _extension_: Extend the lifespan of an asset or task
 
 Transactions not mentioned in the Quick Start guide are described in detail in the full tutorial.
