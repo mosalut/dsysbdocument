@@ -19,32 +19,32 @@ _If you download from sources other than the official link, you may get tampered
 
 Unzip the downloaded package
 
-- __dsysb__：The main program，Responsible for communicating with other nodes, validating incoming data, and reading/writing to the local data
+- __dsysb__: The main program，Responsible for communicating with other nodes, validating incoming data, and reading/writing to the local data
 
-- __dsysbminer__：Mining program ，un this if you want to mine.
+- __dsysbminer__: Mining program ，run this if you want to mine.
 
-- __dsysbcmd__：Command program，Used to interact with both __dsysb__ and __dsysbminer__ 
+- __dsysbcmd__: Command program，Used to interact with both __dsysb__ and __dsysbminer__ 
 
-- __config__：Configuration file
+- __config__: Configuration file
 
-- __removedatabase__：__Linux__ ，only script that clears blockchain data from the node to prevent accidental wallet deletion，Not needed for__windows__ 
+- __removedatabase__: __Linux__ only script that clears blockchain data from the node to prevent accidental wallet deletion，Not needed for __windows__ 
 
 ## Starting dsysb
 
-Navigate to the extracted directory and run:
+Enter the extracted directory and run:
 
 ```bash
 $ ./dsysb [-network_id=0] -remote_host=<ip:port>
 ```
 
-\-network\_id specifies which network to join, supporting values 0 – 16
-- 0: __Mainnet__ not yet online at the time of writing; default
+_\-network\_id specifies which network to join, supporting values 0 – 16
+- 0: __Mainnet__ default
 - 1 - 15: __Testnet__ at present, only testnet 1 is available，others reserved
 - 16: __DEVNet__ for developers
 
 _\-remote\_host_，specifies a known node to connect to，Usually, you can join the DSYSB network via the _remote\_hosts_ list in the configuration file.If this list is empty, you must specify a node using -remote_host to join the network.
 
-For more parameters for __dsysb__ , see here(#)
+For more parameters for __dsysb__ , see [here](https://github.com/mosalut/dsysbdocument/blob/master/dsysb.md)
 
 ## Starting dsysbminer
 If you wish to mine, with __dsysb__ running, open another terminal in the same directory and run:
@@ -68,7 +68,7 @@ $ ./dsysbcmd getindex
 #### Generate wallet address
 
 ```bash
-$ ./dsysbcmd newaddresses // If first time, creates wallet database wallet.db
+$ ./dsysbcmd newaddress // If first time, creates wallet database wallet.db
 ```
 
 #### List addresses
@@ -104,7 +104,7 @@ $ ./dsysbcmd pause
 $ ./dsysbcmd recover 
 ```
 
-If you have sufficient DSB or other assets from mining or transfers, you can send them to others.
+If you have sufficient DSB from mining or transfers. Or other assets from transfers, you can send them to others.
 
 
 #### Transfer transaction
@@ -115,15 +115,15 @@ $ ./dsysbcmd createrawtransaction transfer '{"from":"<sender address>","to":"<re
 $ ./dsysbcmd createrawtransaction transfer '{"from":"D892kxbavZUUmj5DHoVCJAFUWsWMeJCGQY","to":"DBwz7C6u6ggHJXnERzWt2co8yT5gTFtBw5","hier":"<inherit address>","amount":10000000,"bytePrice":10}'
 ```
 
-- When you run the above command, it outputs the raw transaction data --the binary representation of that transaction.
+- Executing the above command will display the transaction raw data, which is the hexadecimal representation of the transaction.
 - _createrawtransaction_  specifies that you want to create a transaction. It can be shortened to _create_
-- In the command, the content enclosed in single quotes is, in fact, a JSON data object
-- In the command, all options or parameters outside of the JSON are written in lowercase. All JSON field names use the camelCase naming convention, such as bytePrice.
-- Field order in JSON does not matter. JSON parsers will correctly interpret the data regardless of the sequence.
+- In the command, the content enclosed in single quotes is a JSON data object
+- In the command, all options or parameters outside of the JSON are written in lowercase. All JSON field names use the camelCase naming convention, such as 'bytePrice'.
+- Field order in JSON does not matter.
 - All numerical inputs and outputs in the command are expressed in satoshis --the smallest unit of Bitcoin，amount: total value to be transferred, in satoshis. bytePrice: fee rate per byte, in satoshis.
-- _transfer_ indicates that the transaction type is a fund transfer.
+- _transfer_ indicates that the transaction type is a transfer.
 - Each transaction requires a _bytePrice_ field, which specifies the price per byte the sender is willing to pay for the transaction.
-- If the _JSON_ data does not include an _assetId_ ，field, the transaction will transfer __DSB__ by default. Otherwise, it will transfer the specified asset.
+- If the _JSON_ data does not include an _assetId_ field, the transaction will transfer __DSB__ by default. Otherwise, it will transfer the specified asset.
 
 ```bash
 	bytePrice × transaction size (bytes) = fee
@@ -144,26 +144,26 @@ miners will sort the transactions in the mempool in descending order based on th
 #### Decode the Transaction
 
 ```bash
-$ ./dsysbcmd decoderawtransaction <transaction data>
+$ ./dsysbcmd decoderawtransaction <transaction raw data>
 ```
 
-- _decoderawtransaction_ can be shortened to_decode_
-- The output will contain details such as the_txid_of the transaction.
+- _decoderawtransaction_ can be shortened to _decode_
+- The output will contain details such as the _txid_ of the transaction.
 - At this stage, the signature information will all be 0
 
 #### Sign the Transaction
 
 ```bash
-$ ./dsysbcmd signrawtransaction <transaction data>
+$ ./dsysbcmd signrawtransaction <transaction raw data>
 ```
 
-- _signrawtransaction_ can be shortened to_sign_
-- It will display the signed transaction data
+- _signrawtransaction_ can be shortened to _sign_
+- It will display the signed transaction raw data
 
 If you now use _decoderawtransaction_ to decode the signed transaction data, you will see that the _signature_ field already contains a non-zero value.  
 
 ```bash
-$ ./dsysbcmd decode <signed_transaction_data>
+$ ./dsysbcmd decode <signed transaction raw data>
 ```
 
 Note: When copying transaction data, make sure not to include spaces, line breaks, or other extra characters.
@@ -171,7 +171,7 @@ Note: When copying transaction data, make sure not to include spaces, line break
 Finally, we send the signed transaction data to the main program. If the main program validates it successfully, it will broadcast the transaction to the network, and other nodes will receive and verify it.
 
 ```bash
-$ ./dsysbcmd sendrawtransaction <signed_transaction_data>
+$ ./dsysbcmd sendrawtransaction <signed transaction raw data>
 ```
 
 - _sendrawtransaction_ can be shortened to _send_
@@ -188,7 +188,7 @@ $ ./dsysbcmd create create '{"name":"<5-10 letters or digits>","symbol":"<3-5 le
 $ ./dsysbcmd create create '{"name":"aaaaaa","symbol":"AAA","decimals":8,"totalSupply":1000000000000000,"price":10,"blocks":10000,"from":"D892kxbavZUUmj5DHoVCJAFUWsWMeJCGQY","bytePrice":1}'
 ```
 
--The first _create_  is the shortened form of _createrawtransaction_ ，The second _create_ specifies that the transaction type is "create asset".
+- The first _create_  is the shortened form of _createrawtransaction_ ，The second _create_ specifies that the transaction type is "create asset".
 - From the asset's field values, an _assetId_ can be calculated，If an_assetId_ already exists on the blockchain, it means an identical asset has already been created, and the new creation request will fail.
 - If no restriction is placed on asset lifespan, many unused or forgotten assets would remain on the chain forever, occupying space and becoming blockchain "garbage".
 - _blocks_  defines the lifespan of the asset, measured in blocks，blocks: 10,000 means that starting from the asset's inclusion on the chain, after 10,000 blocks, it will expire unless someone chooses to extend its lifespan. Historical records of the asset will still remain in earlier blocks even after it expires.
@@ -196,10 +196,10 @@ $ ./dsysbcmd create create '{"name":"aaaaaa","symbol":"AAA","decimals":8,"totalS
 The asset creator does not pay the full lifespan fee all at once during creation.
 At creation time, no blocks have yet been consumed, so the miner who includes the asset creation transaction does not receive any lifespan fee at that moment.
 Only subsequent block producers receive the ongoing life-cycle rewards.
-- _price_  also sets a minimum fee threshold，Any _bytePrice_ used for transferring_transfer_ this asset must be greater than or equal to the asset's _price_,When extending asset lifespan via _extension_ , the same_price_is applied.
-- After the asset is created, the _from_ address (the creator) will initially hold the asset’s totalSupply, as defined in the_JSON_data.
+- _price_  also sets a minimum fee threshold，Any _bytePrice_ used for transferring _transfer_ this asset must be greater than or equal to the asset's _price_,When extending asset lifespan via _extension_ , the same _price_ is applied.
+- After the asset is created, the _from_ address (the creator) will initially hold the asset’s totalSupply, as defined in the _JSON_ data.
 
-Then, use _signrawtransaction_ and _sendrawtransaction_ to broadcast this transaction.
+Then, use _signrawtransaction_ to sign the transaction and _sendrawtransaction_ to broadcast this transaction.
 After a transaction enters the transaction pool, it is not immediately packaged into a block, because the main program is still waiting for more transactions to accumulate in the pool.
 When your miner program successfully mines a block, the main node will then package the current transactions in the pool into a new block.A maximum of 511 transactions can be included, since one additional slot is reserved for the coinbase (mining reward) transaction, making a total of 512 transactions per block.
 Any remaining transactions will be deferred to later blocks.
